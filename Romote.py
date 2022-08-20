@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import COMMA
 from roku import Roku
 from requests.exceptions import ConnectionError, ConnectTimeout
 from socket import gaierror
@@ -175,6 +176,7 @@ def safe_command(roku_command, command_arg = None):
 
 def remote_control(roku):
 
+    TEXT_LITERAL_COMMAND = "txt"
     prev_command = ""
     COMMANDS_MAP = {
         "b" : (roku.back, "Back"),
@@ -192,7 +194,7 @@ def remote_control(roku):
         "hdmi4" : (roku.input_hdmi4, "Source: HDMI4"),
         "tuner" : (roku.input_tuner, "Source: Tuner"),
         "w" : (roku.left, "Left"),
-        "txt" : (roku.literal, "Enter text"),
+        TEXT_LITERAL_COMMAND : (roku.literal, "Enter text"),
         "p" : (roku.play, "Play"),
         "OFF" : (roku.poweroff, "Power Off"),
         "on" : (roku.poweron, "Power On"),
@@ -248,7 +250,12 @@ def remote_control(roku):
 
     while True:
         user_command = get_user_command()
-        if safe_command(COMMANDS_MAP[user_command][0]):
+
+        if (user_command == TEXT_LITERAL_COMMAND):
+            command_arg = input("Please enter the text to send to the Roku device: ")
+        else:
+            command_arg = None
+        if safe_command(COMMANDS_MAP[user_command][0], command_arg):
             prev_command = user_command
 
     return
