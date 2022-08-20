@@ -1,4 +1,3 @@
-from lib2to3.pgen2.token import COMMA
 from roku import Roku
 from requests.exceptions import ConnectionError, ConnectTimeout
 from socket import gaierror
@@ -257,8 +256,6 @@ def remote_control(roku):
             command_arg = None
         if safe_command(COMMANDS_MAP[user_command][0], command_arg):
             prev_command = user_command
-
-    return
 
 def main():
     welcome()
