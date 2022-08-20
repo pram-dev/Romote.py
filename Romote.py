@@ -161,13 +161,17 @@ def initialize_remote():
 
     return roku_remote
 
-def safe_command(roku_command):
+def safe_command(roku_command, command_arg = None):
     try:
-        roku_command()
+        if command_arg:
+            roku_command(command_arg)
+        else:
+            roku_command()
         return True
     except (ConnectionError, TimeoutError):
         print(UNSUCCESSFUL_COMMAND_DIALOGUE)
         return False
+
 
 def remote_control(roku):
 
