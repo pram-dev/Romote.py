@@ -19,9 +19,15 @@ WELCOME_LOGO = r"""
 ROKU_IP_OBJ_LEADING_CHARS = "<Roku: "
 ROKU_IP_OBJ_TRAILING_CHARS = ">"
 EMPTY_ROKU_OBJ_IP = "0.0.0.0:8060"
+ROKU_APP_OBJ_LEADING_CHARS = "<Application: "
+ROKU_APP_OBJ_TRAILING_CHARS = ">"
 NO_DEVICES_AUTODISCOVERED_TEXT = "No nearby Roku devices were autodiscovered."
 GENERIC_ENTER_VALID_OPTION_PROMPT = "Please enter a valid option."
 UNSUCCESSFUL_COMMAND_DIALOGUE = "Could not contact device. Command not sent."
+MAX_HEADER_WIDTH = 40
+QUARTER_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 4)
+HALF_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 2)
+THREE_FOURTHS_HEADER_WIDTH = QUARTER_HEADER_WIDTH * 3
 
 
 def welcome():
@@ -29,11 +35,11 @@ def welcome():
     return
 
 
-def get_roku_ip_strs(devices_list):
-    if devices_list: #if devices were discovered and list is not empty
-        for device in devices_list:
-            device_ip = get_ip_from_roku_obj(device)
-    return
+#def get_roku_ip_strs(devices_list):
+#    if devices_list: #if devices were discovered and list is not empty
+#        for device in devices_list:
+#            device_ip = get_ip_from_roku_obj(device)
+#    return
 
 def get_ip_from_roku_obj(roku_obj): #turns a singular roku object into an IP string
     return (repr(roku_obj).removeprefix(ROKU_IP_OBJ_LEADING_CHARS).removesuffix(ROKU_IP_OBJ_TRAILING_CHARS).split(":"))[0] #return ip string with unnecessary chars and port number removed, since the default discovered port does not appear to work
@@ -173,6 +179,13 @@ def safe_command(roku_command, command_arg = None):
         return False
 
 
+def parse_app_info(app):
+    app = app.removeprefix(ROKU_APP_OBJ_LEADING_CHARS).removesuffix(ROKU_APP_OBJ_TRAILING_CHARS)
+    app_id = app.split(maxsplit = 1)[0]
+    app_name = (app.split(maxsplit = 1)[1]).rsplit(maxsplit = 1)[0]
+    app_version = (app.split(maxsplit = 1)[1]).rsplit(maxsplit = 1)[1]
+    return (app_id, app_name, app_version)
+
 def remote_control(roku):
 
     def show_apps():
@@ -180,12 +193,11 @@ def remote_control(roku):
         apps_list = roku.apps
         for app in apps_list:
             app = repr(app)
-            print(app)
+            app_id, app_name, app_version = parse_app_info(app)
+            print(f"{app_name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app_id.ljust(HALF_HEADER_WIDTH)} {app_version.ljust(QUARTER_HEADER_WIDTH)}")
+            #print(app)
 
-        input()
-        return
-
-    def select_app():
+        input("\nPress ENTER to continue")
         return
 
 
@@ -245,7 +257,7 @@ def remote_control(roku):
                     "desc" : "Source: Tuner",
                     "args" : False
                     },
-        "w" : {"func" : roku.left,
+        "a" : {"func" : roku.left,
                 "desc" : "Left",
                 "args" : False
                 },
@@ -303,14 +315,19 @@ def remote_control(roku):
         "apps" : {"func" : show_apps,
                 "desc" : "Display available apps",
                 "args" : False
+                },
+        "oa" : {#"func" : launch_app,
+                "desc" : "Open app",
+                "args" : True
                 }
     }
 
+#    def launch_app():
+#        return roku[user_app_choice].launch()
+
+
     def display_commands():
-        MAX_HEADER_WIDTH = 40
-        QUARTER_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 4)
-        #HALF_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 2)
-        THREE_FOURTHS_HEADER_WIDTH = QUARTER_HEADER_WIDTH * 3
+
 
         def display_commands_header():
             COMMAND_HEADER_TEXT = "COMMAND"
