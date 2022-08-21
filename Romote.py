@@ -306,8 +306,9 @@ def remote_control(roku):
 
         display_commands_header()
 
-        for (command, action) in COMMANDS_MAP.items():
-            print(f"{command.ljust(HALF_HEADER_WIDTH)}:{(action[1]).rjust(HALF_HEADER_WIDTH)}")
+        for (command, properties) in COMMANDS_MAP.items():
+            #print(f"{command.ljust(HALF_HEADER_WIDTH)}:{(action[1]).rjust(HALF_HEADER_WIDTH)}")
+            print(f"{(properties['desc']).ljust(HALF_HEADER_WIDTH)}:{command.rjust(HALF_HEADER_WIDTH)}")
         return
 
     def get_user_command():
@@ -334,7 +335,7 @@ def remote_control(roku):
             command_arg = input("Please enter the text to send to the Roku device: ")
         else:
             command_arg = None
-        if safe_command(COMMANDS_MAP[user_command][0], command_arg):
+        if safe_command(COMMANDS_MAP[user_command]["func"], command_arg):
             prev_command = user_command
 
 def main():
