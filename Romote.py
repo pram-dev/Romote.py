@@ -175,6 +175,20 @@ def safe_command(roku_command, command_arg = None):
 
 def remote_control(roku):
 
+    def show_apps():
+
+        apps_list = roku.apps
+        for app in apps_list:
+            app = repr(app)
+            print(app)
+
+        input()
+        return
+
+    def select_app():
+        return
+
+
     TEXT_LITERAL_COMMAND = "txt"
     prev_command = ""
     COMMANDS_MAP = {
@@ -285,19 +299,25 @@ def remote_control(roku):
         "m" : {"func" : roku.volume_mute,
                 "desc" : "Mute",
                 "args" : False
+                },
+        "apps" : {"func" : show_apps,
+                "desc" : "Display available apps",
+                "args" : False
                 }
     }
 
     def display_commands():
         MAX_HEADER_WIDTH = 40
-        HALF_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 2)
+        QUARTER_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 4)
+        #HALF_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 2)
+        THREE_FOURTHS_HEADER_WIDTH = QUARTER_HEADER_WIDTH * 3
 
         def display_commands_header():
             COMMAND_HEADER_TEXT = "COMMAND"
             ACTION_HEADER_TEXT = "ACTION"
 
 
-            print(f"{COMMAND_HEADER_TEXT.center(HALF_HEADER_WIDTH)}{ACTION_HEADER_TEXT.center(HALF_HEADER_WIDTH)}")
+            print(f"{ACTION_HEADER_TEXT.center(THREE_FOURTHS_HEADER_WIDTH)}:{COMMAND_HEADER_TEXT.center(QUARTER_HEADER_WIDTH)}")
             print("-" * (MAX_HEADER_WIDTH + 1))
             return
 
@@ -308,7 +328,7 @@ def remote_control(roku):
 
         for (command, properties) in COMMANDS_MAP.items():
             #print(f"{command.ljust(HALF_HEADER_WIDTH)}:{(action[1]).rjust(HALF_HEADER_WIDTH)}")
-            print(f"{(properties['desc']).ljust(HALF_HEADER_WIDTH)}:{command.rjust(HALF_HEADER_WIDTH)}")
+            print(f"{(properties['desc']).ljust(THREE_FOURTHS_HEADER_WIDTH)}:{command.rjust(QUARTER_HEADER_WIDTH)}")
         return
 
     def get_user_command():
