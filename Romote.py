@@ -178,34 +178,114 @@ def remote_control(roku):
     TEXT_LITERAL_COMMAND = "txt"
     prev_command = ""
     COMMANDS_MAP = {
-        "b" : (roku.back, "Back"),
-        "<" : (roku.channel_down, "Channel down"),
-        ">" : (roku.channel_up, "Channel up"),
-        "s" : (roku.down, "Down"),
+        "b" : {"func" : roku.back,
+                "desc" : "Back",
+                "args" : False
+                },
+        "<" : {"func" : roku.channel_down, 
+                "desc" : "Channel down",
+                "args" : False
+                },
+        ">" : {"func" : roku.channel_up,
+                "desc" : "Channel up",
+                "args" : False
+                },
+        "s" : {"func" : roku.down, 
+                "desc" : "Down",
+                "args" : False
+                },
         #"k": (roku.enter, "Enter"),
-        "ff" : (roku.forward, "Forward"),
-        "h" : (roku.home, "Home"),
-        "*" : (roku.info, "Info"),
-        "av1": (roku.input_av1, "Source: AV1"),
-        "hdmi1" : (roku.input_hdmi1, "Source: HDMI1"),
-        "hdmi2" : (roku.input_hdmi2, "Source: HDMI2"),
-        "hdmi3" : (roku.input_hdmi3, "Source: HDMI3"),
-        "hdmi4" : (roku.input_hdmi4, "Source: HDMI4"),
-        "tuner" : (roku.input_tuner, "Source: Tuner"),
-        "w" : (roku.left, "Left"),
-        TEXT_LITERAL_COMMAND : (roku.literal, "Enter text"),
-        "p" : (roku.play, "Play"),
-        "OFF" : (roku.poweroff, "Power Off"),
-        "on" : (roku.poweron, "Power On"),
-        "replay" : (roku.replay, "Replay"),
-        "rew" : (roku.reverse, "Reverse"),
-        "d" : (roku.right, "Right"),
-        "search" : (roku.search, "Search"),
-        "k" : (roku.select, "Select"),
-        "w" : (roku.up, "Up"),
-        "-" : (roku.volume_down, "Volume -"),
-        "+" : (roku.volume_up, "Volume +"),
-        "m" : (roku.volume_mute, "Mute")
+        "ff" : {"func" : roku.forward,
+                "desc" : "Forward",
+                "args" : False
+                },
+        "h" : {"func" : roku.home,
+                "desc" : "Home",
+                "args" : False
+                },
+        "*" : {"func" : roku.info,
+                "desc" : "Info",
+                "args" : False
+                },
+        "av1": {"func" : roku.input_av1,
+                "desc" : "Source: AV1",
+                "args" : False
+                },
+        "hdmi1" : {"func" : roku.input_hdmi1,
+                    "desc" : "Source: HDMI1",
+                    "args" : False
+                    },
+        "hdmi2" : {"func" : roku.input_hdmi2,
+                    "desc" : "Source: HDMI2",
+                    "args" : False
+                    },
+        "hdmi3" : {"func" : roku.input_hdmi3,
+                    "desc" : "Source: HDMI3",
+                    "args" : False
+                    },
+        "hdmi4" : {"func" : roku.input_hdmi4,
+                    "desc" : "Source: HDMI4",
+                    "args" : False
+                    },
+        "tuner" : {"func" : roku.input_tuner,
+                    "desc" : "Source: Tuner",
+                    "args" : False
+                    },
+        "w" : {"func" : roku.left,
+                "desc" : "Left",
+                "args" : False
+                },
+        TEXT_LITERAL_COMMAND : {"func" : roku.literal,
+                                "desc" : "Enter text",
+                                "args" : True},
+        "p" : {"func" : roku.play,
+                "desc" : "Play",
+                "args" : False
+                },
+        "OFF" : {"func" : roku.poweroff,
+                "desc" :"Power Off",
+                "args" : False
+                },
+        "on" : {"func" : roku.poweron,
+                "desc" : "Power On",
+                "args" : False
+                },
+        "replay" : {"func" : roku.replay,
+                    "desc" : "Replay",
+                    "args" : False
+                    },
+        "rew" : {"func" : roku.reverse,
+                "desc" : "Reverse",
+                "args" : False
+                },
+        "d" : {"func" : roku.right,
+                "desc" : "Right",
+                "args" : False
+                },
+        "search" : {"func" : roku.search,
+                    "desc" : "Search",
+                    "args" : False
+                    },
+        "k" : {"func" : roku.select,
+                "desc" : "Select",
+                "args" : False
+                },
+        "w" : {"func" : roku.up,
+                "desc" : "Up",
+                "args" : False
+                },
+        "-" : {"func" : roku.volume_down,
+                "desc" : "Volume -",
+                "args" : False
+                },
+        "+" : {"func" : roku.volume_up,
+                "desc" : "Volume +",
+                "args" : False
+                },
+        "m" : {"func" : roku.volume_mute,
+                "desc" : "Mute",
+                "args" : False
+                }
     }
 
     def display_commands():
