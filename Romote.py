@@ -6,6 +6,9 @@ from configparser import ConfigParser
 class InvalidOptionError(Exception):
     pass
 
+#TODO: simplify show_apps method by using built in Roku app object members instead of parsing app list for values
+#TODO: add ability to launch apps by name or ID (values displayed by show_apps method)
+
 
 WELCOME_LOGO = r"""
 
@@ -39,20 +42,11 @@ def welcome():
     return
 
 
-#def get_roku_ip_strs(devices_list):
-#    if devices_list: #if devices were discovered and list is not empty
-#        for device in devices_list:
-#            device_ip = get_ip_from_roku_obj(device)
-#    return
-
 def get_ip_from_roku_obj(roku_obj): #turns a singular roku object into an IP string
     return (repr(roku_obj).removeprefix(ROKU_IP_OBJ_LEADING_CHARS).removesuffix(ROKU_IP_OBJ_TRAILING_CHARS).split(":"))[0] #return ip string with unnecessary chars and port number removed, since the default discovered port does not appear to work
 
 
-
-
 def devices_str_list(roku_devices_obj):
-
     devices_list = []
 
     for device_obj in roku_devices_obj:
@@ -66,7 +60,6 @@ def basic_connection_check(ip_string):
     possible_roku_device = Roku(ip_string)
     possible_roku_device.up()
     return
-
 
 
 def autodiscover_choice_prompt(roku_objects_list):
@@ -217,7 +210,6 @@ def remote_control(roku):
         input("\nPress ENTER to continue")
         return
 
-
     TEXT_LITERAL_COMMAND = "txt"
     prev_command = ""
     COMMANDS_MAP = {
@@ -342,21 +334,15 @@ def remote_control(roku):
 #    def launch_app():
 #        return roku[user_app_choice].launch()
 
-
     def display_commands():
-
 
         def display_commands_header():
             COMMAND_HEADER_TEXT = "COMMAND"
             ACTION_HEADER_TEXT = "ACTION"
 
-
             print(f"{ACTION_HEADER_TEXT.center(THREE_FOURTHS_HEADER_WIDTH)}:{COMMAND_HEADER_TEXT.center(QUARTER_HEADER_WIDTH)}")
             print("-" * (MAX_HEADER_WIDTH + 1))
             return
-
-
-
 
         display_commands_header()
 
