@@ -1,6 +1,9 @@
 from roku import Roku
 from requests.exceptions import ConnectionError, ConnectTimeout
 from socket import gaierror
+from configparser import ConfigParser
+
+#TODO: add ability to read in default ip from config file in same directory
 
 class InvalidOptionError(Exception):
     pass
