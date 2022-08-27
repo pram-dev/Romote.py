@@ -6,7 +6,6 @@ from configparser import ConfigParser
 class InvalidOptionError(Exception):
     pass
 
-#TODO: simplify show_apps method by using built in Roku app object members instead of parsing app list for values
 #TODO: add ability to launch apps by name or ID (values displayed by show_apps method)
 
 
@@ -188,13 +187,14 @@ def safe_command(roku_command, command_arg = None):
         print(UNSUCCESSFUL_COMMAND_DIALOGUE)
         return False
 
-
+"""
 def parse_app_info(app):
     app = app.removeprefix(ROKU_APP_OBJ_LEADING_CHARS).removesuffix(ROKU_APP_OBJ_TRAILING_CHARS)
     app_id = app.split(maxsplit = 1)[0]
     app_name = (app.split(maxsplit = 1)[1]).rsplit(maxsplit = 1)[0]
     app_version = (app.split(maxsplit = 1)[1]).rsplit(maxsplit = 1)[1]
     return (app_id, app_name, app_version)
+"""
 
 def remote_control(roku):
 
@@ -202,9 +202,9 @@ def remote_control(roku):
 
         apps_list = roku.apps
         for app in apps_list:
-            app = repr(app)
-            app_id, app_name, app_version = parse_app_info(app)
-            print(f"{app_name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app_id.ljust(HALF_HEADER_WIDTH)} {app_version.ljust(QUARTER_HEADER_WIDTH)}")
+#            app = repr(app)
+#            app_id, app_name, app_version = parse_app_info(app)
+            print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)} {app.version.ljust(QUARTER_HEADER_WIDTH)}")
             #print(app)
 
         input("\nPress ENTER to continue")
