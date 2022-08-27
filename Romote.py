@@ -3,8 +3,6 @@ from requests.exceptions import ConnectionError, ConnectTimeout
 from socket import gaierror
 from configparser import ConfigParser
 
-#TODO: add ability to read in default ip from config file in same directory
-
 class InvalidOptionError(Exception):
     pass
 
@@ -31,6 +29,9 @@ MAX_HEADER_WIDTH = 40
 QUARTER_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 4)
 HALF_HEADER_WIDTH = int(MAX_HEADER_WIDTH / 2)
 THREE_FOURTHS_HEADER_WIDTH = QUARTER_HEADER_WIDTH * 3
+CONFIG_FILE = "config.ini"
+CONFIG_FILE_CACHED_SECTION = "cached"
+RECENT_IP_KEY = "recent_ip"
 
 
 def welcome():
@@ -104,8 +105,6 @@ def autodiscover_choice_prompt(roku_objects_list):
 
 def initialize_remote():
 
-    connection_established = False
-
     def establish_connection(device_ip):
         nonlocal connection_established
 
@@ -159,14 +158,29 @@ def initialize_remote():
         return roku_remote
 
 
-    autodiscovered_devices = Roku.discover()
-    if autodiscovered_devices:
-        roku_remote = initial_connection_attempt(autodiscovered_devices)
-    else: #no devices autodiscovered
-        print(NO_DEVICES_AUTODISCOVERED_TEXT)
-    
-    if connection_established == False:
-        roku_remote = establish_connection_loop()
+    connection_established = False
+
+    config = ConfigParser()
+    config.read(CONFIG_FILE)
+    if config:
+        ip_addr= config.get(CONFIG_FILE_CACHED_SECTION, RECENT_IP_KEY)
+        roku_remote = establish_connection(ip_addr) 
+
+    if not connection_established:
+        autodiscovered_devices = Roku.discover()
+        if autodiscovered_devices:
+            roku_remote = initial_connection_attempt(autodiscovered_devices)
+        else: #no devices autodiscovered
+            print(NO_DEVICES_AUTODISCOVERED_TEXT)
+        
+        if connection_established == False:
+            roku_remote = establish_connection_loop()
+
+        with open(CONFIG_FILE, "w") as configfile:
+            config = ConfigParser()
+            config.add_section(CONFIG_FILE_CACHED_SECTION)
+            config.set(CONFIG_FILE_CACHED_SECTION, RECENT_IP_KEY, get_ip_from_roku_obj(roku_remote))
+            config.write(configfile)
 
     return roku_remote
 
