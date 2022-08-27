@@ -155,7 +155,7 @@ def initialize_remote():
 
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    if config:
+    if config.has_section(CONFIG_FILE_CACHED_SECTION):
         ip_addr= config.get(CONFIG_FILE_CACHED_SECTION, RECENT_IP_KEY)
         roku_remote = establish_connection(ip_addr) 
 
