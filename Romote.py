@@ -1,5 +1,3 @@
-from curses.ascii import isdigit
-from urllib.parse import uses_relative
 from roku import Roku
 from requests.exceptions import ConnectionError, ConnectTimeout
 from socket import gaierror
@@ -7,8 +5,6 @@ from configparser import ConfigParser
 
 class InvalidOptionError(Exception):
     pass
-
-#TODO: add ability to launch apps by name or ID (values displayed by show_apps method)
 
 
 WELCOME_LOGO = r"""
@@ -58,7 +54,7 @@ def devices_str_list(roku_devices_obj):
 
 
 def basic_connection_check(ip_string):
-    print("BASIC_CONNECTION_CHECK. IP_STRING ==", ip_string)
+    #print("BASIC_CONNECTION_CHECK. IP_STRING ==", ip_string)
     possible_roku_device = Roku(ip_string)
     possible_roku_device.up()
     return
@@ -133,7 +129,7 @@ def initialize_remote():
                         device_ip = autodiscover_choice_prompt(autodiscovered_devices)
             elif user_choice == "": #user chooses to try to autodiscover nearby devices
                 autodiscovered_devices = Roku.discover()
-                print("CURRENTLY IN ELIF BRANCH, TRYING TO REDISCOVER AUTOMATICALLY. CURRENT DISCOVERED:", autodiscovered_devices)
+
                 if not autodiscovered_devices:
                     print(NO_DEVICES_AUTODISCOVERED_TEXT)
                     continue
@@ -149,9 +145,8 @@ def initialize_remote():
     def initial_connection_attempt(roku_obj_list):
         device_ip = autodiscover_choice_prompt(roku_obj_list)
         roku_remote = establish_connection(device_ip)
-        print("CONNECTION_ESTABLISHED ==", connection_established)
+        #print("CONNECTION_ESTABLISHED ==", connection_established)
         return roku_remote
-
 
     connection_established = False
 
@@ -179,6 +174,7 @@ def initialize_remote():
 
     return roku_remote
 
+
 def safe_command(roku_command, command_arg = None):
     try:
         if command_arg:
@@ -190,14 +186,6 @@ def safe_command(roku_command, command_arg = None):
         print(UNSUCCESSFUL_COMMAND_DIALOGUE)
         return False
 
-"""
-def parse_app_info(app):
-    app = app.removeprefix(ROKU_APP_OBJ_LEADING_CHARS).removesuffix(ROKU_APP_OBJ_TRAILING_CHARS)
-    app_id = app.split(maxsplit = 1)[0]
-    app_name = (app.split(maxsplit = 1)[1]).rsplit(maxsplit = 1)[0]
-    app_version = (app.split(maxsplit = 1)[1]).rsplit(maxsplit = 1)[1]
-    return (app_id, app_name, app_version)
-"""
 
 def remote_control(roku):
 
@@ -207,15 +195,11 @@ def remote_control(roku):
     def show_apps():
         apps_list = roku.apps
         for app in apps_list:
-#            app = repr(app)
-#            app_id, app_name, app_version = parse_app_info(app)
             print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)} {app.version.ljust(QUARTER_HEADER_WIDTH)}")
-            #print(app)
         return
 
     def display_apps():
         show_apps()
-
         input("\nPress ENTER to continue")
         return
 
@@ -223,8 +207,8 @@ def remote_control(roku):
         show_apps()
         user_app_choice = input("\nPlease enter the name or ID of the app you'd like to launch: ")
         if user_app_choice.isdigit():
-            print("CONVERTING USER CHOICE TO INT")
             user_app_choice = int(user_app_choice)
+
         while not roku[user_app_choice]:
             user_app_choice = input("This app doesn't seem to exist on this device... Please enter a valid app name or ID or enter 'm' to return to the main menu: ")
             if user_app_choice == "m":
@@ -250,7 +234,6 @@ def remote_control(roku):
                 "desc" : "Down",
                 "args" : False
                 },
-        #"k": (roku.enter, "Enter"),
         "ff" : {"func" : roku.forward,
                 "desc" : "Forward",
                 "args" : False
@@ -365,7 +348,6 @@ def remote_control(roku):
         display_commands_header()
 
         for (command, properties) in COMMANDS_MAP.items():
-            #print(f"{command.ljust(HALF_HEADER_WIDTH)}:{(action[1]).rjust(HALF_HEADER_WIDTH)}")
             print(f"{(properties['desc']).ljust(THREE_FOURTHS_HEADER_WIDTH)}:{command.rjust(QUARTER_HEADER_WIDTH)}")
         return
 
