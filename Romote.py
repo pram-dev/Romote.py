@@ -1,3 +1,5 @@
+from curses.ascii import isdigit
+from urllib.parse import uses_relative
 from roku import Roku
 from requests.exceptions import ConnectionError, ConnectTimeout
 from socket import gaierror
@@ -34,6 +36,7 @@ THREE_FOURTHS_HEADER_WIDTH = QUARTER_HEADER_WIDTH * 3
 CONFIG_FILE = "config.ini"
 CONFIG_FILE_CACHED_SECTION = "cached"
 RECENT_IP_KEY = "recent_ip"
+ID_PREFIX_TV_INPUT = "tvinput."
 
 
 def welcome():
@@ -198,20 +201,38 @@ def parse_app_info(app):
 
 def remote_control(roku):
 
-    def show_apps():
+    TEXT_LITERAL_COMMAND = "txt"
+    prev_command = ""
 
+    def show_apps():
         apps_list = roku.apps
         for app in apps_list:
 #            app = repr(app)
 #            app_id, app_name, app_version = parse_app_info(app)
             print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)} {app.version.ljust(QUARTER_HEADER_WIDTH)}")
             #print(app)
+        return
+
+    def display_apps():
+        show_apps()
 
         input("\nPress ENTER to continue")
         return
 
-    TEXT_LITERAL_COMMAND = "txt"
-    prev_command = ""
+    def launch_app():
+        show_apps()
+        user_app_choice = input("\nPlease enter the name or ID of the app you'd like to launch: ")
+        if user_app_choice.isdigit():
+            print("CONVERTING USER CHOICE TO INT")
+            user_app_choice = int(user_app_choice)
+        while not roku[user_app_choice]:
+            user_app_choice = input("This app doesn't seem to exist on this device... Please enter a valid app name or ID or enter 'm' to return to the main menu: ")
+            if user_app_choice == "m":
+                break
+        else:
+            roku[user_app_choice].launch()
+        return
+
     COMMANDS_MAP = {
         "b" : {"func" : roku.back,
                 "desc" : "Back",
@@ -321,18 +342,15 @@ def remote_control(roku):
                 "desc" : "Mute",
                 "args" : False
                 },
-        "apps" : {"func" : show_apps,
+        "apps" : {"func" : display_apps,
                 "desc" : "Display available apps",
                 "args" : False
                 },
-        "oa" : {#"func" : launch_app,
+        "oa" : {"func" : launch_app,
                 "desc" : "Open app",
                 "args" : True
                 }
     }
-
-#    def launch_app():
-#        return roku[user_app_choice].launch()
 
     def display_commands():
 
