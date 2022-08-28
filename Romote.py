@@ -62,7 +62,6 @@ def basic_connection_check(ip_string):
 
 def autodiscover_choice_prompt(roku_objects_list):
 
-
     autodiscovered_devices_strs = devices_str_list(roku_objects_list) #get devices as a list of strings
     total_options = len(roku_objects_list)
 
@@ -194,6 +193,9 @@ def remote_control(roku):
 
     def show_apps():
         apps_list = roku.apps
+        print() #print newline for spacing
+        print(f"{'APP'.ljust(THREE_FOURTHS_HEADER_WIDTH)} {'ID'.ljust(HALF_HEADER_WIDTH)} {'VERSION'.ljust(QUARTER_HEADER_WIDTH)}")
+        print("-" * (THREE_FOURTHS_HEADER_WIDTH  + THREE_FOURTHS_HEADER_WIDTH))
         for app in apps_list:
             print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)} {app.version.ljust(QUARTER_HEADER_WIDTH)}")
         return
@@ -210,7 +212,7 @@ def remote_control(roku):
             user_app_choice = int(user_app_choice)
 
         while not roku[user_app_choice]:
-            user_app_choice = input("This app doesn't seem to exist on this device... Please enter a valid app name or ID or enter 'm' to return to the main menu: ")
+            user_app_choice = input("This app doesn't seem to exist on this device... Please enter a valid app name or ID, or enter 'm' to return to the main menu: ")
             if user_app_choice == "m":
                 break
         else:
