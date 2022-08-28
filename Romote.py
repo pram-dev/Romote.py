@@ -193,8 +193,7 @@ def remote_control(roku):
 
     def show_apps():
         apps_list = roku.apps
-        print() #print newline for spacing
-        print(f"{'APP'.ljust(THREE_FOURTHS_HEADER_WIDTH)} {'ID'.ljust(HALF_HEADER_WIDTH)} {'VERSION'.ljust(QUARTER_HEADER_WIDTH)}")
+        print(f"\n{'APP'.ljust(THREE_FOURTHS_HEADER_WIDTH)} {'ID'.ljust(HALF_HEADER_WIDTH)} {'VERSION'.ljust(QUARTER_HEADER_WIDTH)}")
         print("-" * (THREE_FOURTHS_HEADER_WIDTH  + THREE_FOURTHS_HEADER_WIDTH))
         for app in apps_list:
             print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)} {app.version.ljust(QUARTER_HEADER_WIDTH)}")
