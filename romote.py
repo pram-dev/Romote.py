@@ -198,13 +198,21 @@ def remote_control(roku):
             print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)} {app.version.ljust(QUARTER_HEADER_WIDTH)}")
         return
 
+    def show_apps_simplified():
+        apps_list = roku.apps
+        print(f"\n{'APP'.ljust(THREE_FOURTHS_HEADER_WIDTH)} {'ID'.ljust(HALF_HEADER_WIDTH)}")
+        print("-" * (MAX_HEADER_WIDTH + QUARTER_HEADER_WIDTH))
+        for app in apps_list:
+            print(f"{app.name.ljust(THREE_FOURTHS_HEADER_WIDTH)} {app.id.ljust(HALF_HEADER_WIDTH)}")
+        return
+
     def display_apps():
         show_apps()
         input("\nPress ENTER to continue")
         return
 
     def launch_app():
-        show_apps()
+        show_apps_simplified()
         user_app_choice = input("\nPlease enter the name or ID of the app you'd like to launch: ")
         if user_app_choice.isdigit():
             user_app_choice = int(user_app_choice)
